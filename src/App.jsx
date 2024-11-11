@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import MainCanvas from './Canvas'
+import data from "./data";
+
 
 function App() {
   
@@ -14,6 +16,6 @@ function App() {
   )
 }
 
-export default App
+export default App;
 
 
