@@ -2,15 +2,16 @@ import { useEffect, useRef } from 'react';
 import images from './image';
 import gsap from 'gsap';
 
-function Canvas({ startIndex }) {
+function Canvas({ details }) {
+  const { startIndex , numImages, duration, top, size, left, zIndex } = details;
   const canvasRef = useRef(null);
   const indexRef = useRef({ value: startIndex }); // Use ref to track the index continuously without triggering re-renders
 
   useEffect(() => {
     // Initialize gsap animation with infinite repeat
     const animation = gsap.to(indexRef.current, {
-      value: startIndex + 149,
-      duration: 3,
+      value: startIndex + numImages - 1,
+      duration: duration,
       ease: "linear",
       repeat: -1, // Infinite repeat
       onUpdate: renderImage, // Call renderImage function to update canvas
