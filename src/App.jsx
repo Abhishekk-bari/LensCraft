@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import MainCanvas from './MainCanvas'
+import images from '../src/image'
 
 function App() {
+  useEffect(() =>{
+    console.log(images)
+  });
+
+  
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <div className="w-full min-h-screen bg-black text-white">
+      <MainCanvas />
     </div>
   )
 }
