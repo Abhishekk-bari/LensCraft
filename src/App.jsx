@@ -4,14 +4,24 @@ import data from "./data";
 import LocomotiveScroll from "locomotive-scroll";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import "locomotive-scroll/dist/locomotive-scroll.css";
 
 function App() {
   const [showCanvas, setShowCanvas] = useState(false);
   const headingref = useRef(null);
   const growingSpan = useRef(null);
+  const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    const locomotiveScroll = new LocomotiveScroll();
+    const locomotiveScroll = new LocomotiveScroll({
+      el: scrollContainerRef.current,
+      smooth: true,
+    });
+
+    return () => {
+      // Destroy LocomotiveScroll instance on component unmount
+      locomotiveScroll.destroy();
+    };
   }, []);
 
   useEffect(() => {
@@ -75,7 +85,7 @@ function App() {
           <nav className="w-full p-8 flex justify-between z-50">
             <div className="brand text-2xl font-regular">LensCraft</div>
             <div className="links flex gap-10">
-              {["Home", "About", "Projects", "Contact"].map((link, index) => (
+              {["Home", "About", "Work", "Hire"].map((link, index) => (
                 <a
                   key={index}
                   href={`#${link.toLowerCase()}`}
