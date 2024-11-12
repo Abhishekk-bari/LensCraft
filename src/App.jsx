@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Canvas from "./Canvas";
 import data from "./data";
 import LocomotiveScroll from "locomotive-scroll";
 
 function App() {
   const [showCanvas, setShowCanvas] = useState(false);
+  const headingref = useRef(null);
 
   useEffect(() => {
     const locomotiveScroll = new LocomotiveScroll();
-  }, []);
+    headingref.current.addEventListener("click", () => {
+      setShowCanvas(!showCanvas);
+    });
+  }, [showCanvas]);
 
   return (
     <>
       <div className="w-full relative min-h-screen font-['Helvetica_Now_Display']">
-        {/* {data[0].map((canvasdets, index) => (
-        <Canvas details={canvasdets} />
-      ))} */}
+        {showCanvas && 
+        data[0].map
+        ((canvasdets, index) => (
+        <Canvas details={canvasdets} />))}
 
         <div className="w-full relative z-[2] h-screen text-white">
           <nav className="w-full p-8 flex justify-between z-50">
@@ -48,7 +53,7 @@ function App() {
           </div>
 
           <div className="w-full absolute bottom-0 left-0">
-            <h1 className="pl-0 text-[14rem] font-normal tracking-tight leading-none">
+            <h1 ref={headingref} className="pl-0 text-[14rem] font-normal tracking-tight leading-none">
               LensCraft Studio
             </h1>
           </div>
