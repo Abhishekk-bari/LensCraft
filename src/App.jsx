@@ -2,20 +2,69 @@ import React, { useEffect, useRef, useState } from "react";
 import Canvas from "./Canvas";
 import data from "./data";
 import LocomotiveScroll from "locomotive-scroll";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 function App() {
   const [showCanvas, setShowCanvas] = useState(false);
   const headingref = useRef(null);
+  const growingSpan = useRef(null);
 
   useEffect(() => {
     const locomotiveScroll = new LocomotiveScroll();
-    headingref.current.addEventListener("click", () => {
-      setShowCanvas(!showCanvas);
-    });
-  }, [showCanvas]);
+  }, []);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      setShowCanvas((prevShowCanvas) => {
+        if (!prevShowCanvas) {
+          gsap.set(growingSpan.current, {
+            top: e.clientY,
+            left: e.clientX,
+          });
+
+          gsap.to("body", {
+            color: "#fff",
+            backgroundColor: "#fd2c2a",
+            duration: 1.2,
+            ease: "power2.inOut",
+          });
+
+          gsap.to(growingSpan.current, {
+            scale: 1000,
+            duration: 2,
+            ease: "power2.inOut",
+            onComplete: () => {
+              gsap.set(growingSpan.current, {
+                scale: 0,
+                clearProps: "all",
+              });
+            },
+          });
+        } else {
+          gsap.to("body", {
+            color: "#fff",
+            backgroundColor: "#000",
+            duration: 1.2,
+            ease: "power2.inOut",
+          });
+        }
+
+        return !prevShowCanvas;
+      });
+    };
+
+    const headingElement = headingref.current;
+    headingElement.addEventListener("click", handleClick);
+
+    // Clean up event listener on unmount
+    return () => headingElement.removeEventListener("click", handleClick);
+  }, []);
+
 
   return (
     <>
+    <span ref={growingSpan} className="growing rounded-full block top-0 left-0 w-5 h-5"></span>
       <div className="w-full relative min-h-screen font-['Helvetica_Now_Display']">
         {showCanvas && 
         data[0].map
@@ -24,7 +73,7 @@ function App() {
 
         <div className="w-full relative z-[2] h-screen text-white">
           <nav className="w-full p-8 flex justify-between z-50">
-            <div className="brand text-2xl font-regular">TS</div>
+            <div className="brand text-2xl font-regular">LensCraft</div>
             <div className="links flex gap-10">
               {["Home", "About", "Projects", "Contact"].map((link, index) => (
                 <a
@@ -61,9 +110,10 @@ function App() {
       </div>
 
       <div className="w-full relative   mt-32 px-10">
-        {/* {data[1].map((canvasdets, index) => (
-        <Canvas details={canvasdets} />
-      ))} */}
+      {showCanvas && 
+        data[1].map
+        ((canvasdets, index) => (
+        <Canvas details={canvasdets} />))}
         <div className="relative z-[1]">
           <h1 className="text-6xl tracking-tighter">
             Welcome to LensCraft Studio!
@@ -87,11 +137,12 @@ function App() {
       </div>
 
       <div className="w-full relative mt-32 px-10">
-        {/* {data[2].map((canvasdets, index) => (
-        <Canvas details={canvasdets} />
-      ))} */}
+      {showCanvas && 
+        data[2].map
+        ((canvasdets, index) => (
+        <Canvas details={canvasdets} />))}
         <div className=" relative z-[1]">
-          <h3 className="text-4xl pl-[80vw] tracking-tighter">SERVICES</h3>
+          <h3 className="text-4xl pl-[80vw] tracking-tighter underline">SERVICES</h3>
           
           <p className="leading-[1.8] pl-40 w-[80%] mt-1 text-lg ">
             <span className="block mt-20">
@@ -123,19 +174,27 @@ function App() {
           <h1 className="pt-10 text-center text-7xl">Where Every Picture Tells Your Story</h1>
         </div>
         <div className="w-full relative mt-32 px-10">
-        {/* {data[2].map((canvasdets, index) => (
-        <Canvas details={canvasdets} />
-      ))} */} 
-      <div className="text-center relative z-[1]">
+        {showCanvas && 
+        data[3].map
+        ((canvasdets, index) => (
+        <Canvas details={canvasdets} />))}
+      <div className="text-center relative z-[2]">
         <h2 className="text-2xl">
           Drop us a line at hello@thirtysixstudio.com or use the form below.</h2>
-      <p>Email: info@capturedmoments.com</p>
-      <p>Phone: (123) 456-7890</p>
-      <p>Location: 123 Photography Lane, YourCity</p>
+      <p className="text-xl">Email: info@capturedmoments.com</p>
+      <p className="text-xl">Phone: (123) 456-7890</p>
+      <p className="text-xl">Location: 123 Photography Lane, YourCity</p>
       </div>
       </div>
-      <h1 className="text-7xl pt-20 m-10">Capture today, cherish tomorrow. 
-        <span>Let us create lasting memories together.</span></h1>
+      
+      <div className="pl-5 pt-28 font-['Helvetica_Now_Display'] relative z-[2] pb-0 overflow-hidden">
+      {showCanvas && 
+        data[4].map
+        ((canvasdets, index) => (
+        <Canvas details={canvasdets} />))}
+      <h1 className="text-7xl ">Capture today, cherish tomorrow.</h1>
+      <span className="text-7xl">Let us create lasting memories together.</span>
+      </div>
       </div>
 
       {/* <div className="w-full relative min-h-screen">
